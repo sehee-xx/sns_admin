@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+  <head>
+    <%- include('../includes/head.ejs') %>
+  </head>
+
+  <body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        <%- include('../includes/menu.ejs') %>
+      
+        <%- include('../includes/top.ejs') %>
+      <div class="content">
+        <%- include('../includes/nav.ejs') %>
+
+        <h2 class="text-bold text-1100 mb-5"><%=basicInfo.title%></h2>
+        
+        <div id="members" >
+          <div class="mb-4">
+            <div class="d-flex flex-wrap gap-5">
+                <%- include('../includes/datepicker.ejs') %>
+               
+                <div class="search-box">
+                    <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
+                    <input class="form-control search-input search" id="srchText" type="search" placeholder="선택 조회" aria-label="Search" value="<%= basicInfo.search.srchText %>"/>
+                    <span class="fas fa-search search-box-icon"></span>
+                    </form>
+                </div>
+              <div class="col-1">
+                <button class="btn btn-outline-primary me-1 mb-1" type="button" onClick="fnSearch()" >검색</button>
+              </div>
+              <div class="col-1 ">
+                <select class="form-select" id="rowsPerPage" onChange="fnViewCnt(this)">
+                  <option value="20" <% if ( basicInfo.search.rowsPerPage == "10") { %> selected <% } %>>10</option>
+                  <option value="20" <% if ( basicInfo.search.rowsPerPage == "20") { %> selected <% } %>>20</option>
+                  <option value="50" <% if ( basicInfo.search.rowsPerPage == "50") { %> selected <% } %>>50</option>
+                  <option value="100" <% if ( basicInfo.search.rowsPerPage == "100") { %> selected <% } %>>100</option>
+                  <option value="300" <% if ( basicInfo.search.rowsPerPage == "300") { %> selected <% } %>>300</option>
+                </select>
+            </div>
+            </div>
+          </div>
+          <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-white border-y border-300 mt-2 position-relative top-1">
+            <div class="table-responsive scrollbar ms-n1 ps-1">
+              <table class="table table-sm fs--1 mb-0">
+                <thead>
+                  <tr>
+                    
+                    <th class="sort align-middle" scope="col"  style="width:10%;">카테고리명</th>                    
+                    <th class="sort align-middle" scope="col"  style="width:10%;">상품명</th>
+                    <th class="sort align-middle" scope="col"  style="width:10%;">상품가격</th>
+                    <th class="sort align-middle" scope="col"  style="width:10%;">최소수량</th>
+                    <th class="sort align-middle" scope="col"  style="width:10%;">최대수량</th>
+                    <th class="sort align-middle" scope="col"  style="width:10%;">전시여부</th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="members-table-body">
+                  
+                  <%
+                  if (basicInfo.productList.length > 0) {
+                  basicInfo.productList.forEach(function (el) { 
+                  %>
+
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="city align-middle white-space-nowrap text-900"><%=el.category_title%></td>
+                    <td class="city align-middle white-space-nowrap text-900"><%=el.title%></td>
+                    <td class="align-middle white-space-nowrap text-700 "> <%=el.price%></td>
+                    <td class="align-middle white-space-nowrap text-700 "> <%=el.min%></td>
+                    <td class="align-middle white-space-nowrap text-700 "><%=el.max%></td>
+                    <td class="align-middle white-space-nowrap text-700 "><%=el.view_yn%></td>
+                  </tr>
+                  <% } ) } %>
+                </tbody>
+              </table>
+            </div>
+            <%- include('../includes/paging.ejs') %>
+          </div>
+        </div>
+        <!-- footer -->
+        <%- include('../includes/footer.ejs') %>
+      </div>
+   
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <%- include('../includes/scripts.ejs') %>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <%- include('../includes/modal.ejs') %>
+
+    <script>
+  
+
+      function fnSearch(pindex) {
+        let pageIndex = $('#pageIndex').val();
+        if (pindex != 'undefined' && pindex != undefined) pageIndex = pindex;
+
+        let srchText = $('#srchText').val();
+        let srchOption = $('#srchOption option:selected').val();
+        let rowsPerPage = $('#rowsPerPage option:selected').val();
+
+        let srtDt = $('#srtDt').val();
+        let endDt = $('#endDt').val();
+
+        let form = document.createElement("form");
+        form.setAttribute("charset", "UTF-8");
+        form.setAttribute("method", "Post");
+        form.setAttribute("action", "/pr/sell");
+
+        let hiddenField1 = document.createElement("input");
+        hiddenField1.setAttribute("type", "hidden");
+        hiddenField1.setAttribute("name", "pageIndex");
+        hiddenField1.setAttribute("value", pageIndex);
+        form.appendChild(hiddenField1);
+
+        let hiddenField2 = document.createElement("input");
+        hiddenField2.setAttribute("type", "hidden");
+        hiddenField2.setAttribute("name", "rowsPerPage");
+        hiddenField2.setAttribute("value", rowsPerPage);
+        form.appendChild(hiddenField2);
+
+        let hiddenField3 = document.createElement("input");
+        hiddenField3.setAttribute("type", "hidden");
+        hiddenField3.setAttribute("name", "srchText");
+        hiddenField3.setAttribute("value", srchText);
+        form.appendChild(hiddenField3);
+
+        let hiddenField4 = document.createElement("input");
+        hiddenField4.setAttribute("type", "hidden");
+        hiddenField4.setAttribute("name", "srchOption");
+        hiddenField4.setAttribute("value", srchOption);
+        form.appendChild(hiddenField4);
+
+
+        let hiddenField6 = document.createElement("input");
+        hiddenField6.setAttribute("type", "hidden");
+        hiddenField6.setAttribute("name", "srchMember");
+        hiddenField6.setAttribute("value", srchMember);
+        form.appendChild(hiddenField6);
+
+
+        let hiddenField7 = document.createElement("input");
+        hiddenField7.setAttribute("type", "hidden");
+        hiddenField7.setAttribute("name", "srtDt");
+        hiddenField7.setAttribute("value", srtDt);
+        form.appendChild(hiddenField7);
+
+        let hiddenField8 = document.createElement("input");
+        hiddenField8.setAttribute("type", "hidden");
+        hiddenField8.setAttribute("name", "endDt");
+        hiddenField8.setAttribute("value", endDt);
+        form.appendChild(hiddenField8);
+
+        document.body.appendChild(form);
+        form.submit();
+      }
+  
+    </script>
+  </body>
+
+</html>

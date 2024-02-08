@@ -1,0 +1,91 @@
+<nav class="navbar navbar-top fixed-top navbar-expand" id="navbarDefault">
+    <div class="collapse navbar-collapse justify-content-between">
+      <div class="navbar-logo">
+
+        <button class="btn navbar-toggler navbar-toggler-humburger-icon hover-bg-transparent" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+        <a class="navbar-brand me-1 me-sm-3" href="/d/view">
+          <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center"><img src="/admin/img/typlay_log.png" alt="SNS-PLAY" width="100" />
+              <p class="logo-text ms-2 d-none d-sm-block"></p>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+      <ul class="navbar-nav navbar-nav-icons flex-row">
+        <li class="nav-item">
+          <div class="theme-control-toggle fa-icon-wait px-2">
+            <input class="form-check-input ms-0 theme-control-toggle-input" type="checkbox" data-theme-control="phoenixTheme" value="dark" id="themeControlToggle" />
+            <label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch theme"><span class="icon" data-feather="moon"></span></label>
+            <label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Switch theme"><span class="icon" data-feather="sun"></span></label>
+          </div>
+        </li>
+        
+        <li class="nav-item dropdown"><a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+            <div class="avatar avatar-l ">
+              <img class="rounded-circle " src="/admin/img/admin_user.png" alt="" />
+
+            </div>
+          </a>
+          <div class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border border-300" aria-labelledby="navbarDropdownUser">
+            <div class="card position-relative border-0">
+              <div class="card-body p-0">
+                <div class="text-center pt-4 pb-3">
+                  <h6 class="mt-2 text-black"><%=user.memId%></h6>
+                </div>
+              </div>
+              <div class="card-footer p-0 border-top border-translucent">
+                <ul class="nav d-flex flex-column my-3">
+                  <li class="nav-item"><a  data-bs-toggle="modal" data-bs-target="#adminPassWd" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"
+                    class="nav-link px-3" href="javascript:void(0)"> <span class="me-2 text-body" data-feather="user-plus"></span>개인정보</a></li>
+                </ul>
+                <hr />
+                <div class="px-3"> <a class="btn btn-phoenix-secondary d-flex flex-center w-100" href="/logout"> <span class="me-2" data-feather="log-out"> </span>Sign out</a></div>
+                <div class="my-2 text-center fw-bold fs-10 text-body-quaternary"><a class="text-body-quaternary me-1" href="#!">Privacy policy</a>&bull;<a class="text-body-quaternary mx-1" href="#!">Terms</a></div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="modal fade" id="adminPassWd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="adminPassWdLabel" aria-hidden="true">
+    <div class="modal-dialog   modal-dialog-centered">
+      <div class="modal-content bg-100 p-6">
+        <div class="modal-header border-0 p-0 mb-2">
+          <h3 class="mb-0" >패스워드 변경</h3>
+          <button class="btn btn-sm btn-phoenix-secondary" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+        </div>
+        <div class="modal-body px-0 ">
+            <div class="row mt-4">
+                <div class="col " >
+                    <div class="row g-2 mt-2">
+                        <div class="col">
+                            <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 어드민 ID </span>
+                        </div>
+                        <div class="col">
+                            <input class="form-control input-text-center fs--1" readonly id="mod_admin_id" type="text" value="<%=user.memId%>" />
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-2 ">
+                        <div class="col">
+                            <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 패스워드</span>
+                        </div>
+                        <div class="col">
+                            <input class="form-control input-text-center fs--1" id="admin_password" type="text" value="" />
+                        </div>
+                    </div>
+                        
+                </div>
+            </div>
+        
+       
+        </div>
+        <div class="modal-footer border-0 pt-6 px-0 pb-0">
+          <button class="btn btn-link text-danger px-3 my-0" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+          <button class="btn btn-primary my-0" onclick="fnAdminModifyUpt()" >수정</button>
+        </div>
+      </div>
+    </div>
+</div>

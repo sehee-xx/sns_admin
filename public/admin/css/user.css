@@ -1,0 +1,50 @@
+/*-----------------------------------------------
+|   Phoenix buttons
+-----------------------------------------------*/
+/* -------------------------------------------------------------------------- */
+/*                                Phoenix button                              */
+/* -------------------------------------------------------------------------- */
+/* prettier-ignore */
+/* ----------------------------- Phoenix-buttons ---------------------------- */
+/*# sourceMappingURL=user.css.map */
+.col-1-5 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    width: 12.33333333%;
+  }
+
+.cpl-1 {
+    padding-left:1px;
+}
+
+.cpr-1 {
+    padding-right:1px;
+}
+
+
+.input-text-center {
+    text-align:center;
+    padding: 0.2rem 0.5rem;
+}
+
+.bg-color-0 {
+    background-color: rgba(0,0,0,0);
+}
+
+.btn-end {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.need::placeholder {
+    color: red;
+    font-size: 13px;
+    opacity: 0.5; /* Firefox */
+}
+
+.need::-ms-input-placeholder { /* Edge 12 -18 */
+    color: red;
+}
+ 

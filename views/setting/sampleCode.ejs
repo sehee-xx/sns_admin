@@ -1,0 +1,145 @@
+
+
+<!-- //START :: ========================매출 / 재 추천 수당===============================-->
+<div class="row border-top border-dashed mt-2 ">
+    <div class="col-6 d-flex justify-content-start mt-6">
+        <div class="row g-3">
+            <div class="col cpl-1 cpr-1">
+                <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 회원아이디 </span>
+            </div>
+            <div class="col  pr-4">
+                <input class="form-control input-text-center " id="memId" type="text" value="" />
+            </div>
+            <div class="col pl-4 ">
+                <span class="btn btn-primary" onclick="fnBuyProduct()">상품 구매</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 d-flex justify-content-start mt-6">
+        <div class="row g-5">
+            <div class="col cpl-1 cpr-1">
+                <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 회원아이디 </span>
+            </div>
+            <div class="col  pr-4">
+                <input class="form-control input-text-center " id="smemId" type="text" value="" />
+            </div>
+            <div class="col cpl-1 cpr-1">
+                <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 제품키 등록 </span>
+            </div>
+            <div class="col  pr-4">
+                <input class="form-control input-text-center " id="skey" type="text" value="<%=basicInfo.randomString%>" />
+            </div>
+            <div class="col pl-4 ">
+                <span class="btn btn-primary" onclick="fnSetKey()">등록</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 d-flex justify-content-start mt-6">
+        <div class="row g-3">
+            <div class="col cpl-1 cpr-1">
+                <span class="form-control input-text-center fs--1 border-0 bg-color-0"> PUSH </span>
+            </div>
+            <div class="col  pr-4">
+                <input class="form-control input-text-center " id="pmemId" type="text" value="" />
+            </div>
+            <div class="col pl-4 ">
+                <span class="btn btn-primary" onclick="fnPush()">전송</span>
+            </div>
+        </div>
+    </div>
+    
+        
+</div>
+<!-- //END :: ========================매출 / 재 추천 수당===============================-->
+
+
+<script>
+    function fnBuyProduct() {
+        let data = {
+            "memId":$('#memId').val(),
+            "sType":"CMCD00000000000017" // 현금 
+        }
+console.log(data)
+        $.ajax({
+            url: '/b/buyProduct',
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function (result) {
+                console.log(result)
+                if(result.success) {
+                    fnAlertMessage("정상적으로 수정 되었습니다.");
+                } else {
+                    console.log(result)
+                    fnAlertMessage(result.message);
+                }
+                
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+            } //function끝
+        });
+
+        
+    }
+
+    function fnSetKey() {
+        let data = {
+            "memId":$('#smemId').val(),
+            "sKey":$('#skey').val()
+        }
+
+        $.ajax({
+            url: '/b/setPorductKey',
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function (result) {
+                console.log(result)
+                if(result.success) {
+                    fnAlertMessage("정상적으로 수정 되었습니다.");
+                } else {
+                    console.log(result)
+                    fnAlertMessage(result.message);
+                }
+                
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+            } //function끝
+        });
+
+        
+    }
+
+    function fnPush() {
+        let data = {
+            "memId":$('#pmemId').val()
+        }
+
+        $.ajax({
+            url: '/s/pushAPI',
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function (result) {
+                console.log(result)
+                if(result.success) {
+                    fnAlertMessage("정상적으로 수정 되었습니다.");
+                } else {
+                    console.log(result)
+                    fnAlertMessage(result.message);
+                }
+                
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+            } //function끝
+        });
+
+        
+    }
+    
+</script>

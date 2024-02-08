@@ -1,0 +1,125 @@
+<head>
+  <%- include('./includes/head.ejs') %>
+</head>
+
+
+  <body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+      <div class="container">
+        <div class="row flex-center min-vh-100 py-5">
+          <div class="col-sm-10 col-md-8 col-lg-5 col-xl-5 col-xxl-3"><a class="d-flex flex-center text-decoration-none mb-4" href="/">
+              <div class="d-flex align-items-center fw-bolder fs-5 d-inline-block"><img src="/admin/img/icons/logo.webp" alt="sns-play"  />
+              </div>
+            </a>
+            <div class="text-center mb-7">
+              <h3 class="text-1000">로그인</h3>
+              <p class="text-700">SNS PLAY Management</p>
+            </div>
+            
+            <div class="mb-3 text-start">
+              <label class="form-label" for="email">사용자 ID</label>
+              <div class="form-icon-container">
+                <input class="form-control form-icon-input" id="memId" type="text" placeholder="사용자아이디" /><span class="fas fa-user text-900 fs--1 form-icon"></span>
+              </div>
+            </div>
+            <div class="mb-3 text-start">
+              <label class="form-label" for="password">비밀번호</label>
+              <div class="form-icon-container">
+                <input class="form-control form-icon-input" id="memPass" type="password" placeholder="Password" /><span class="fas fa-key text-900 fs--1 form-icon"></span>
+              </div>
+            </div>
+            <div class="row flex-between-center mb-7">
+              <div class="col-auto">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" id="memIdRemebmer" type="checkbox"  />
+                  <label class="form-check-label mb-0" for="memIdRemebmer">아이디저장</label>
+                </div>
+              </div>
+              
+            </div>
+            <span class="btn btn-primary w-100 mb-3" onclick="fnLogin()">로그인</span>
+            <!-- <div class="text-center"><a class="fs--1 fw-bold" href="javascript:void();" >계정생성</a></div> -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <%- include('./includes/scripts.ejs') %>
+    
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <%- include('./includes/modal.ejs') %>
+
+    <script>
+      $(document).ready(function () {
+      
+        let saveId = getCookie('saveId');
+      
+        if(nullChk(saveId)){
+            $("#memId").val(saveId);
+            $('#memIdRemebmer').prop('checked', true);
+        }
+
+        $("#memPass").keypress(function (event) {
+            if (event.which == 13) {
+                fnLogin();
+            }
+        });
+
+        $('#memIdRemebmer').click(function(){
+         
+          var checked = $('#memId-remebmer').is(':checked');
+      
+          if(!checked) {
+            setCookie("saveId", $("#memId").val(), 7) 
+          } else {
+            setCookie("saveId","", 0) 
+          } 
+        });
+
+
+      });
+  
+      function fnLogin(){
+          let mId = $("#memId").val();
+          let mPass = $("#memPass").val();
+  
+          if (!nullChk(mId)) {
+              alertModal("아이디를 입력하세요.");
+              return;
+          } else if (!nullChk(mPass)) {
+              alertModal("비밀번호를 입력하세요.");
+              return;
+          }
+  
+          let form = document.createElement("form");
+          form.setAttribute("charset", "UTF-8");
+          form.setAttribute("method", "post"); //Post 방식
+          form.setAttribute("action", "/signin"); //요청 보낼 주소
+  
+          let hiddenField = document.createElement("input");
+          hiddenField.setAttribute("type", "hidden");
+          hiddenField.setAttribute("name", "memId");
+          hiddenField.setAttribute("value", "1"+mId.trim());
+          form.appendChild(hiddenField);
+  
+          let hiddenField2 = document.createElement("input");
+          hiddenField2.setAttribute("type", "hidden");
+          hiddenField2.setAttribute("name", "memPass");
+          hiddenField2.setAttribute("value", "1"+mPass.trim());
+          form.appendChild(hiddenField2);
+  
+          document.body.appendChild(form);
+         
+          form.submit();
+      }
+  </script>
+  </body>
+
+</html>

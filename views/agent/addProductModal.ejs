@@ -1,0 +1,226 @@
+<!-- 회원 생성 업데이트 Modal-->
+<div class="modal fade" id="addProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl  modal-dialog-centered">
+      <div class="modal-content bg-100 p-6">
+        <div class="modal-header border-0 p-0 mb-2">
+          <h3 class="mb-0" id="memInsUpt">에이전트 상품 매칭</h3>
+          <button class="btn btn-sm btn-phoenix-secondary" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+        </div>
+        <div class="modal-body px-0 ">
+          <div class="row  g-3">
+            <div class="col-lg-3">
+              <div class="mb-4">
+                <label class="text-1000 fw-bold mb-2 fs-0">아이디</label>
+                <input class="form-control" type="text" id="p_agentId" readonly value="" />
+              </div>
+
+            </div>
+            <div class="col-lg-3">
+                <div class="mb-4">
+                  <label class="text-1000 fw-bold mb-2 fs-0">상품선택</label>
+                  <select class="form-select" id="productSeqOption">
+                    <option value="" >선택</option>
+                   
+                  <%
+                    if (basicInfo.productList.length > 0) {
+                    basicInfo.productList.forEach(function (el) { 
+                    %>
+                    <option value="<%=el.seq%>" ><%=el.title%> (<%=Number(el.krw).toLocaleString('ko-KR',{style:"currency", currency:"KRW"})%>)</option>
+                <% }) } %>
+                </select>
+                </div>
+                
+            </div>
+            <div class="col-lg-4">
+              <div class="mb-2">
+               
+                <button class="btn btn-primary my-0 mt-5" onclick="fnSetAgentProduct()">저장</button>
+                </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="ol-12 col-md-auto">
+              <button class="btn btn-outline-info me-1 mb-1" type="button"  onclick="fnGetAgentProductList()">조회하기</button>
+          </div>
+              <div class="table-responsive scrollbar ms-n1 pe-1  ps-1">
+                <table class="table table-sm fs--1 mb-0">
+                  <thead>
+                    <tr>
+                      <th class="sort align-middle" scope="col"  style="width:10%; ">에이전트 아이디</th>
+                      <th class="sort align-middle" scope="col"  style="width:10%; ">전시 상품제목</th>
+                      <th class="sort align-middle" scope="col"  style="width:10%; ">상품 카테고리</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; "> 등록 상품제목</th>
+                      <th class="sort align-middle" scope="col"  style="width:10%; ">KRW</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; ">USD</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; ">전시여부</th>
+                    </tr>
+                  </thead>
+                  <tbody class="list" id="agent-product-table-body">
+                     
+           
+                   
+                  </tbody>
+                </table>
+              </div>
+            </div>
+       
+        </div>
+        <div class="modal-footer border-0 pt-6 px-0 pb-0">
+          <button class="btn btn-link text-danger px-3 my-0" data-bs-dismiss="modal" aria-label="Close">닫기</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- 신규 회원일때 처리 -->
+<script>
+  function fnInitProduct(id) {
+    $('#p_agentId').val(id)
+  }
+
+  function fnSetAgentProduct(){
+    let _url = '/a/setAP'
+    let data = {}
+    if ($('#productSeqOption').val() == "" || $('#productSeqOption').val() == "undefined" ) {
+        fnAlertMessage("상품을 선택해주세요.");
+        return;
+    }
+    data.productSeq =$('#productSeqOption').val()
+
+    
+    if ($('#p_agentId').val() == "") {
+        fnAlertMessage("에이전트 아이디가 선택되지 않았습니다.");
+        return;
+    }
+    data.agentId = $('#p_agentId').val()
+
+    wrapWindowByMaskShow()
+    $.ajax({
+        url: _url,
+        dataType: 'json',
+        type: 'POST',
+        data: data,
+        success: function (result) {
+            wrapWindowByMaskHide()
+            if(result.success) {
+              //fnAlertReloadMessage("정상 처리 되었습니다. ")
+              fnAlertMessage("정상 처리 되었습니다. ")
+            } else {
+              fnAlertMessage(result.message);
+            }
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            wrapWindowByMaskHide()
+            fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+         
+        } //function끝
+    });
+  }
+  
+  function fnGetAgentProductList(){
+    let _url = '/a/getAPList'
+    let data = {}
+    if ($('#p_agentId').val() == "") {
+        fnAlertMessage("에이전트 아이디가 선택되지 않았습니다.");
+        return;
+    }
+    data.agentId = $('#p_agentId').val()
+
+    wrapWindowByMaskShow()
+    $.ajax({
+        url: _url,
+        dataType: 'json',
+        type: 'POST',
+        data: data,
+        success: function (result) {
+            wrapWindowByMaskHide()
+           
+            if(result.success) {
+              console.log(result)
+              let html = "";
+              if (result.data.length > 0) {
+                result.data.forEach(function (el) { 
+               html += `
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="email align-middle white-space-nowrap">${el.agent_id}</td>
+                    <td class="email align-middle white-space-nowrap">${el.title}</td>
+                    <td class="mobile_number align-middle white-space-nowrap">${el.category}</td>product_nm
+                    <td class="city align-middle white-space-nowrap text-900">${el.product_nm}</td>
+                    <td class="align-middle white-space-nowrap text-700 ">${el.krw}</td>
+                    <td class="align-middle white-space-nowrap text-700 ">${el.usd}</td>
+                    <td class="align-middle   white-space-nowrap text-700 "> `
+                      
+                      if ( el.product_yn != 'Y') { 
+                    html += `
+                      <button
+                        data-bs-toggle="modal" data-bs-target="#modAgentModal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"
+                          class="btn btn-link text-danger fs--2"
+                          style="padding-left : 0px; padding-left : 5px; " 
+                          onclick="fnProducView('${el.seq}', 'Y')"
+                        > 전시 </button> 
+                      `
+                      } else {
+                        html += `
+                      <button
+                        data-bs-toggle="modal" data-bs-target="#modAgentModal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"
+                          class="btn btn-link text-success fs--2"
+                          style="padding-left : 0px; padding-left : 5px; " 
+                          onclick="fnProducView('${el.seq}', 'N')"
+                        > 미전시 </button> 
+                      `
+                      }
+                      html += `
+                    </td>
+                  </tr>`
+                 } ) } 
+                 $('#agent-product-table-body').empty();
+
+                  $('#agent-product-table-body').append(html);
+            } else {
+              fnAlertMessage(result.message);
+            }
+
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            wrapWindowByMaskHide()
+            fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+         
+        } //function끝
+    });
+  }
+
+  function fnProducView(pSeq, viewYn){
+    let _url = '/a/productView'
+   
+    // let selProductViewYN = $('#selProductViewYN').val()
+    // if(!nullChk(selProductViewYN) ) {
+    //   fnAlertMessage("전시여부를 선택해 주세요");
+    //   return
+    // }
+    let data = {}
+    data.pSeq = pSeq;
+    data.pViewYn = viewYn;
+
+    wrapWindowByMaskShow()
+    $.ajax({
+        url: _url,
+        dataType: 'json',
+        type: 'POST',
+        data: data,
+        success: function (result) {
+          wrapWindowByMaskHide()
+          if(result.success) {
+              fnAlertReloadMessage(result.message)
+          } else {
+              fnAlertMessage(result.message);
+          }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            wrapWindowByMaskHide()
+            fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+         
+        } //function끝
+    });
+  }
+</script>

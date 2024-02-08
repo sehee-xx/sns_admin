@@ -1,0 +1,86 @@
+<div class="modal fade" id="alertReloadModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertReloadModalLabel">알림</h5>
+        <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-700 lh-lg mb-0" id="alertReloadModalBody" > </p>
+      </div>
+      <div class="modal-footer">
+        <span class="btn btn-primary" type="button" onClick="window.location.reload();return false;">확인</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="alertModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertModalLabel">알림</h5>
+        <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-700 lh-lg mb-0" id="alertModalBody" > </p>
+      </div>
+      <div class="modal-footer">
+        <span class="btn btn-primary" type="button" data-bs-dismiss="modal" aria-label="Close">확인</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="alertFnSearchModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertFnSearchModalLabel">알림1</h5>
+        <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-700 lh-lg mb-0" id="alertFnSearchModalBody" > </p>
+      </div>
+      <div class="modal-footer">
+        <span class="btn btn-primary" type="button" onClick="fnSearch()">확인</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <button class="btn btn-primary" id="liveToastBtn" type="button">Show live toast</button> -->
+
+<input type="hidden" id="alertMessage" value="<%=alertMessage.message %>" />
+
+<script>
+  const alertModal = new window.bootstrap.Modal(document.querySelector("#alertModal"),{});
+  const alertReloadModal = new window.bootstrap.Modal(document.querySelector("#alertReloadModal"),{});
+  const alertFnSearchModal = new window.bootstrap.Modal(document.querySelector("#alertFnSearchModal"),{});
+
+  $(function(){
+      message = $('#alertMessage').val();
+  // 실행할 기능을 정의해주세요.
+    if(message !="") {
+      fnAlertMessage(message)
+    }
+  });
+  
+
+  function fnAlertReloadMessage(message) {
+    $('#alertReloadModalBody').text(message);
+    alertReloadModal.show();
+  }
+
+  function fnAlertMessage(message) {
+    $('#alertModalBody').text(message);
+    alertModal.show();
+  }
+
+  function fnAlertFnSearchMessage(message) {
+    $('#alertFnSearchModalBody').text(message);
+    alertFnSearchModal.show();
+  }
+
+
+</script>
+

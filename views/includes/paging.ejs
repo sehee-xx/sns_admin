@@ -1,0 +1,36 @@
+<!-- Center-->
+<div class="row mt-2">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            
+            <% if(basicInfo.pagination.curSet > 1  ) { %>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0);" onclick="$('#pageIndex').val('1'); fnSearch();" tabindex="-1" aria-disabled="true"> <span class="fas fa-chevron-left"> </span> </a>
+                </li>
+            <% }%>
+            <% for(var i = basicInfo.pagination.startPage; i <= basicInfo.pagination.endPage; i++){
+                if(i > basicInfo.pagination.totalPage){
+                    break;
+                }
+
+                if(i == basicInfo.pagination.pageIndex){ %>
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="javascript:void(0);"><%=parseInt(i)%></a>
+                    </li>
+                <% } else { %>
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="$('#pageIndex').val('<%=i%>'); fnSearch();"><%=parseInt(i)%></a>
+                    </li>
+                <% } %>
+            <% } %>
+            <% if(basicInfo.pagination.curSet < basicInfo.pagination.totalSet){ %>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0);" onclick="$('#pageIndex').val('<%=((basicInfo.pagination.curSet+1) * 10)-9%>'); fnSearch();"> <span class="fas fa-chevron-right"></span></a>
+                </li>
+            <% } %>
+            
+        </ul>
+    </nav>
+
+</div>
+<input type="hidden" id="pageIndex" value="<%=basicInfo.pagination.pageIndex%>" />

@@ -1,0 +1,85 @@
+
+
+<!-- //START :: ========================매출 / 재 추천 수당===============================-->
+<div class="row border-top border-dashed mt-2 ">
+    <!-- Start : 신규 매출 추천 수당 -->  
+    <div class="col-sm-6 col-md-6 mt-2">
+        <label class="text-1000 fw-bold mb-2 fs--1">판매 가격 및 포인트 설정</label>
+        <div class="row g-3">
+            <div class="col cpl-1 cpr-1">
+                <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 판매가격 </span>
+            </div>
+            <div class="col cpl-1 cpr-1">
+                <input class="form-control input-text-center fs--1" id="cf_cost1" type="text" value="<%=basicInfo.cInfo[0].cf_cost1%>" />
+            </div>
+            <div class="col cpl-1 ">
+            </div>
+        </div>
+        <div class="row g-3 mt-n2">
+            <div class="col cpl-1 cpr-1">
+                <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 포인트 수량  </span>
+            </div>
+            <div class="col cpl-1 cpr-1">
+                <input class="form-control input-text-center fs--1" id="cf_point1" type="text" value="<%=basicInfo.cInfo[0].cf_point1%>" />
+            </div>
+            <div class="col cpl-1 ">
+                
+            </div>
+        </div>
+    </div>
+    <!-- End : 신규 매출 추천 수당 -->
+    <!-- Start : 재 매출 추천 수당 -->
+    <div class="col-sm-6 col-md-6 mt-2">
+        <label class="text-1000 fw-bold mb-2 fs--1">Noti 당 소모 수량 </label>
+        <div class="row g-3">
+            <div class="col cpl-1 cpr-1">
+                <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 소모 포인트  </span>
+            </div>
+            <div class="col cpl-1 cpr-1">
+                <input class="form-control input-text-center fs--1" id="cf_unit1" type="text" value="<%=basicInfo.cInfo[0].cf_unit1%>" />
+            </div>
+            <div class="col cpl-1 ">
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- End : 재 매출 추천 수당 -->
+    <div class="col-12 d-flex justify-content-end mt-6">
+        <span class="btn btn-primary" onclick="fnSave()">설정변경</span>
+    </div>
+</div>
+<!-- //END :: ========================매출 / 재 추천 수당===============================-->
+
+
+<script>
+    function fnSave() {
+        let data = {
+            "cf_cost1":$('#cf_cost1').val(),
+            "cf_point1":$('#cf_point1').val(),
+            "cf_unit1":$('#cf_unit1').val(),
+        }
+console.log(data)
+        $.ajax({
+            url: '/s/saveConfig',
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function (result) {
+                console.log(result)
+                if(result.success) {
+                    fnAlertMessage("정상적으로 수정 되었습니다.");
+                } else {
+                    console.log(result)
+                    fnAlertMessage(result.message);
+                }
+                
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+            } //function끝
+        });
+
+        
+    }
+</script>

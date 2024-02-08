@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="KO" dir="ltr">
+
+  <head>
+    <%- include('../includes/head.ejs') %>
+  </head>
+
+
+  <body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        <%- include('../includes/menu.ejs') %>
+      
+        <%- include('../includes/top.ejs') %>
+
+      <div class="content">
+        <%- include('../includes/nav.ejs') %>
+
+        <div class="pb-6">
+          <div class="row align-items-center justify-content-between g-3 mb-6">
+            <div class="col-12 col-md-auto">
+              <h2 class="mb-0"><%=basicInfo.title%></h2>
+            </div>
+          </div>
+         
+            <div id="bouns" >
+               
+                <div class="d-flex flex-wrap gap-1">
+                  <div class="col-1 ">
+                    <select class="form-select" id="srchOption">
+                        <option value="0" <% if ( basicInfo.search.srchOption == "0") { %> selected <% } %>>선택</option>
+                        <option value="1" <% if ( basicInfo.search.srchOption == "1") { %> selected <% } %>>아이디</option>
+                      </select>
+                  </div>
+                  <div class="search-box">
+                    <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
+                      <input class="form-control search-input search" id="srchText" type="search" placeholder="선택 조회" aria-label="Search" value="<%= basicInfo.search.srchText %>"/>
+                      <span class="fas fa-search search-box-icon"></span>
+                    </form>
+                  </div>
+                  <div class="col-1">
+                    <button class="btn btn-outline-primary me-1 mb-1" type="button" onClick="fnSearch()" >검색</button>
+                  </div>
+                  <div class="ms-xxl-auto">
+                    <button class="btn btn-outline-info me-1 mb-1" type="button"  data-bs-toggle="modal" data-bs-target="#noticeModal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">신규작성</button>
+                  
+                  </div>
+                </div>
+                <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-white border-y border-300 mt-2 position-relative top-1">
+                  <div class="table-responsive scrollbar ms-n1 ps-1">
+                    <table class="table table-sm fs--1 mb-0">
+                      <thead>
+                        <tr>
+                          <th class="align-middle" scope="col"  style="width:5%; min-width:100px;">순번</th>
+                          <th class="align-middle" scope="col"  style="width:20%; min-width:100px;">제목</th>
+                          <th class="align-middle" scope="col"  style="width:50%; min-width:100px;">내용</th>
+                          <th class="align-middle" scope="col"  style="width:10%; min-width:100px;">작성자</th>
+                          <th class="align-middle" scope="col"  style="width:5%; min-width:100px;">조회건수</th>
+                          <th class="align-middle" scope="col"  style="width:5%; min-width:100px;">노출여부</th>
+                          <th class="align-middle" scope="col"  style="width:5%; min-width:100px;">생성일</th>
+                        </tr>
+                      </thead>
+                      <tbody class="list" id="bonus-table-body">
+                       
+                        <%
+                        if (basicInfo.bbs.length > 0) {
+                        basicInfo.bbs.forEach(function (el) { 
+                        %>
+                       
+                        <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                          <td class="mobile_number align-middle white-space-nowrap"><%=el.seq %></td>
+                          <td class="mobile_number align-middle white-space-nowrap"><%=el.title %></td>
+                          <td class="city align-middle white-space-nowrap text-900"><%=el.content.substring(0,20) %>...</td>
+                          <td class="last_active align-middle  white-space-nowrap text-700"><%=el.writer %></td>
+                          <td class="align-middle white-space-nowrap text-700 "><%=el.view_cnt %></td>
+                          <td class="align-middle white-space-nowrap text-700 "><%=el.use_yn %></td>
+                          <td class="align-middle white-space-nowrap text-700 "><%=el.crt_dt %></td>
+                        </tr>
+
+                        <% } ) } %>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <%- include('../includes/paging.ejs') %>
+                </div>
+              </div>
+          </div>
+         
+        </div>
+        <%- include('../includes/footer.ejs') %>
+      </div>
+  
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+
+   
+
+<!-- 회원 생성 업데이트 Modal-->
+<div class="modal fade" id="noticeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+  <div class="modal-dialog  modal-xl  modal-dialog-centered">
+    <div class="modal-content bg-100 p-6">
+      <div class="modal-header border-0 p-0 mb-2">
+        <h3 class="mb-0" id="memInsUpt">공지사항</h3>
+        <button class="btn btn-sm btn-phoenix-secondary" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+      </div>
+      <div class="modal-body px-0 ">
+        <form>
+          <div class="mb-3">
+            <label class="form-label" for="title">타이틀</label>
+            <input class="form-control" id="title" type="text" placeholder="제목">
+            <input class="form-control" id="nseq" type="hidden" >
+          </div>
+          <div class="mb-3 form-check">
+            <input class="form-check-input" id="use_yn_ck" type="checkbox" checked />
+            <label class="form-check-label" for="use_yn_ck">사용여부</label>
+            <input type="hidden" id="use_yn" value="Y">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="content">Description</label>
+            <textarea class="form-control" id="content" rows="20" placeholder="Description"></textarea>
+          </div>
+        </form>
+      
+      </div>
+      <div class="modal-footer border-0 pt-6 px-0 pb-0">
+        <button class="btn btn-link text-danger px-3 my-0" data-bs-dismiss="modal" aria-label="Close">취소</button>
+        <button class="btn btn-primary my-0" onclick="fnSetNotice()" >저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+     <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <%- include('../includes/scripts.ejs') %>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <%- include('../includes/modal.ejs') %>
+    <script>
+      
+      window.onload = function(){
+
+        const use_yn_ck = document.querySelector("#use_yn_ck");
+        use_yn_ck.addEventListener("change", () => {
+          if (use_yn_ck.checked) {
+            alert("aa")
+            $('#use_yn').val("Y")
+          } else {
+            $('#use_yn').val("N")
+          }
+        });
+
+      };
+      
+      function fnNoticeEdit(seq,title,content) {
+        $('#nseq').val(seq)
+        $('#title').val(title)
+        $('#content').val(content)
+      }
+
+      function fnSetNotice() {
+        alert("gg")
+        let seq = $('#nseq').val()
+        let title = $('#title').val()
+        let content = $('#content').val()
+        let use_yn = $('#use_yn').val()
+        if (!nullChk(title)) {
+            fnAlertMessage("제목를 입력해주세요");
+            return;
+        }
+
+        let data = {
+          seq: seq,
+          content:content,
+          title : title,
+          use_yn:use_yn
+        }
+
+        $.ajax({
+            url: '/ad/bbs/modify',
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function (result) {
+                if(result.success) {
+                    fnAlertReloadMessage("정상 처리 되었습니다. ")
+                } else {
+                    console.log(result)
+                    fnAlertMessage(result.message);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('새로 고침 후 다시 시도하여 주세요');
+            } //function끝
+        });
+    }
+
+    function fnSearch() {
+
+      let pageIndex = $('#pageIndex').val();
+      let rowsPerPage = 10 //$('#rowsPerPage').val();
+   
+      let srchText = $('#srchText').val();
+      let srchOption = $('#srchOption option:selected').val();
+
+      let form = document.createElement("form");
+      form.setAttribute("charset", "UTF-8");
+      form.setAttribute("method", "Post");
+      form.setAttribute("action", "ad/bbs/view");
+      
+      let hiddenField1 = document.createElement("input");
+      hiddenField1.setAttribute("type", "hidden");
+      hiddenField1.setAttribute("name", "pageIndex");
+      hiddenField1.setAttribute("value", pageIndex);
+      form.appendChild(hiddenField1);
+
+      let hiddenField2 = document.createElement("input");
+      hiddenField2.setAttribute("type", "hidden");
+      hiddenField2.setAttribute("name", "rowsPerPage");
+      hiddenField2.setAttribute("value", rowsPerPage);
+      form.appendChild(hiddenField2);
+
+      let hiddenField3 = document.createElement("input");
+      hiddenField3.setAttribute("type", "hidden");
+      hiddenField3.setAttribute("name", "srchText");
+      hiddenField3.setAttribute("value", srchText);
+      form.appendChild(hiddenField3);
+
+      let hiddenField4 = document.createElement("input");
+      hiddenField4.setAttribute("type", "hidden");
+      hiddenField4.setAttribute("name", "srchOption");
+      hiddenField4.setAttribute("value", srchOption);
+      form.appendChild(hiddenField4);
+
+
+      document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
+  </body>
+
+</html>

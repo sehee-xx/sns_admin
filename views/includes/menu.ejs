@@ -1,0 +1,142 @@
+<nav class="navbar navbar-vertical navbar-expand-lg">
+    <script>
+      var navbarStyle = window.config.config.phoenixNavbarStyle;
+      if (navbarStyle && navbarStyle !== 'transparent') {
+        document.querySelector('body').classList.add(`navbar-${navbarStyle}`);
+      }
+    </script>
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+      <!-- scrollbar removed-->
+      <div class="navbar-vertical-content">
+        <ul class="navbar-nav flex-column" id="navbarVerticalNav">
+          <li class="nav-item">
+            <!-- parent pages Dashboard--> 
+            <div class="nav-item-wrapper"><a class="nav-link label-1" href="javascript:fnMove('/d/view')" role="button" data-bs-toggle="" aria-expanded="false">
+                <div class="d-flex align-items-center"><span class="nav-link-icon"><span data-feather="pie-chart"></span></span><span class="nav-link-text-wrapper"><span class="nav-link-text">Home</span></span>
+                </div>
+              </a>
+            </div>
+
+            <!--  회원관리 -->
+            <div class="nav-item-wrapper">
+                <a class="nav-link dropdown-indicator label-1" href="#nv-membership" role="button" data-bs-toggle="collapse" aria-expanded="true" aria-controls="nv-membership">
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown-indicator-icon">
+                            <span class="fas fa-caret-right"></span>
+                        </div>
+                        <span class="nav-link-icon">
+                            <span data-feather="users"></span>
+                        </span>
+                        <span class="nav-link-text">회원관리</span>
+                    </div>
+                </a>
+              <div class="parent-wrapper label-1">
+                <% if ( basicInfo.nav1 == "회원관리") { %>
+                  <ul class="nav collapse parent show" data-bs-parent="#navbarVerticalCollapse" id="nv-membership">
+                <%} else {%>
+                  <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="nv-membership">
+                <%}%>
+                  <li class="collapsed-nav-item-title d-none">회원관리
+                  </li>
+                  <li class="nav-item"><a class="nav-link" href="javascript:fnMove('/m/mview')" data-bs-toggle="" aria-expanded="false">
+                      <div class="d-flex align-items-center"><span class="nav-link-text">회원리스트</span>
+                      </div>
+                    </a>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+
+
+            <!-- HTS 관리 설정 -->
+            <div class="nav-item-wrapper">
+              <a class="nav-link dropdown-indicator label-1" href="#nv-hts" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-customization">
+                  <div class="d-flex align-items-center">
+                      <div class="dropdown-indicator-icon">
+                          <span class="fas fa-caret-right"></span>
+                      </div>
+                      <span class="nav-link-icon">
+                          <span data-feather="archive"></span>
+                      </span>
+                      <span class="nav-link-text">상품 관리</span>
+                  </div>
+              </a>
+            <div class="parent-wrapper label-1">
+              <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="nv-hts">
+                
+                <li class="nav-item">
+                  <a class="nav-link" href="javascript:fnMove('/pr/view')" data-bs-toggle="" aria-expanded="false">
+                  <div class="d-flex align-items-center"><span class="nav-link-text">서비스상품관리</span></div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="javascript:fnMove('/pr/sell')" data-bs-toggle="" aria-expanded="false">
+                  <div class="d-flex align-items-center"><span class="nav-link-text">판매상품관리</span></div>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="javascript:fnMove('/pr/category')" data-bs-toggle="" aria-expanded="false">
+                  <div class="d-flex align-items-center"><span class="nav-link-text">카테고리관리</span></div>
+                  </a>
+                </li>
+            
+            
+              </ul>
+            </div>
+<% if (user.memId == 'prime_pg') { %>
+             <!-- 시스템 설정 -->
+             <div class="nav-item-wrapper">
+              <a class="nav-link dropdown-indicator label-1" href="#nv-setting" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="nv-customization">
+                  <div class="d-flex align-items-center">
+                      <div class="dropdown-indicator-icon">
+                          <span class="fas fa-caret-right"></span>
+                      </div>
+                      <span class="nav-link-icon">
+                          <span data-feather="settings"></span>
+                      </span>
+                      <span class="nav-link-text">설정</span>
+                  </div>
+              </a>
+            <div class="parent-wrapper label-1">
+              <% if ( basicInfo.nav1 == "시스템") { %>
+                <ul class="nav collapse parent show" data-bs-parent="#navbarVerticalCollapse" id="nv-setting">
+              <%} else {%>
+                <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="nv-setting">
+              <%}%>
+
+             
+                <li class="collapsed-nav-item-title d-none">시스템
+                </li>
+                <li class="nav-item"><a class="nav-link" href="javascript:fnMove('/s/productcd')" data-bs-toggle="" aria-expanded="false">
+                  <div class="d-flex align-items-center"><span class="nav-link-text">상품코드</span>
+                  </div>
+                </a>
+              </li>
+                <li class="nav-item"><a class="nav-link" href="javascript:fnMove('/s/config')" data-bs-toggle="" aria-expanded="false">
+                  <div class="d-flex align-items-center"><span class="nav-link-text">설정</span>
+                  </div>
+                </a>
+              </li>
+
+                <li class="nav-item"><a class="nav-link" href="javascript:fnMove('/s/cmmcd')" data-bs-toggle="" aria-expanded="false">
+                  <div class="d-flex align-items-center"><span class="nav-link-text">공통코드</span>
+                  </div>
+                </a>
+              </li>
+            
+              </ul>
+            </div>
+          </div>
+
+          </li>
+       
+        </ul>
+      </div>
+<% } %>
+    </div>
+    <div class="navbar-vertical-footer">
+      <button class="btn navbar-vertical-toggle border-0 fw-semi-bold w-100 white-space-nowrap d-flex align-items-center"><span class="uil uil-left-arrow-to-left fs-0"></span><span class="uil uil-arrow-from-right fs-0"></span><span class="navbar-vertical-footer-text ms-2">Collapsed View</span></button>
+    </div>
+  </nav>
+

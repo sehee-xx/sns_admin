@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+  <head>
+    <%- include('../includes/head.ejs') %>
+  </head>
+
+
+  <body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        <%- include('../includes/menu.ejs') %>
+      
+        <%- include('../includes/top.ejs') %>
+      <div class="content">
+        <%- include('../includes/nav.ejs') %>
+
+        <h2 class="text-bold text-1100 mb-5"><%=basicInfo.title%></h2>
+        
+        <div id="members" >
+          <div class="mb-4">
+            <div class="d-flex flex-wrap gap-5">
+                <%- include('../includes/datepicker.ejs') %>
+               
+               
+                <div class="col-1 ">
+                    <select class="form-select" id="srchOption">
+                        <option value="0" <% if ( basicInfo.search.srchOption == "0") { %> selected <% } %>>선택</option>
+                        <option value="1" <% if ( basicInfo.search.srchOption == "1") { %> selected <% } %>>아이디</option>
+                        <option value="2" <% if ( basicInfo.search.srchOption == "2") { %> selected <% } %>>에이전트</option>
+                    </select>
+                </div>
+                <div class="search-box">
+                    <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
+                    <input class="form-control search-input search" id="srchText" type="search" placeholder="선택 조회" aria-label="Search" value="<%= basicInfo.search.srchText %>"/>
+                    <span class="fas fa-search search-box-icon"></span>
+                    </form>
+                </div>
+              <div class="col-1">
+                <button class="btn btn-outline-primary me-1 mb-1" type="button" onClick="fnSearch(1)" >검색</button>
+              </div>
+            </div>
+          </div>
+          <div class="row align-items-end justify-content-between pb-3 g-2">
+            <!-- <div class="col-auto">
+                <select class="form-select" id="rowsPerPage" onchange="fnSearch(1)">
+                    <option value="10" <% if ( basicInfo.search.rowsPerPage == "10") { %> selected <% } %>>10</option>
+                    <option value="20" <% if ( basicInfo.search.rowsPerPage == "20") { %> selected <% } %>>20</option>
+                    <option value="50" <% if ( basicInfo.search.rowsPerPage == "50") { %> selected <% } %>>50</option>
+                    <option value="100" <% if ( basicInfo.search.rowsPerPage == "100") { %> selected <% } %>>100</option>
+                </select>
+            </div>
+            -->
+            <div class="ol-12 col-md-auto">
+                <button class="btn btn-outline-info me-1 mb-1" type="button" data-bs-toggle="modal" data-bs-target="#addAgentModal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent">에이전트등록</button>
+            </div>
+        </div>
+          <div class="mx-n4 mx-lg-n6 px-4 px-lg-6 mb-9 bg-white border-y border-300 mt-2 position-relative top-1">
+            <div class="table-responsive scrollbar ms-n1 ps-1">
+              <table class="table table-sm fs--1 mb-0">
+                <thead>
+                  <tr>
+                    <th class="sort align-middle" scope="col"  style="width:1%; "></th>
+                    <th class="sort align-middle" scope="col"  style="width:10%; ">에이전트 아이디</th>
+                    <th class="sort align-middle" scope="col"  style="width:10%; ">에이전트 명칭</th>
+                    <th class="sort align-middle" scope="col"  style="width:10%; ">상위 에이전트</th>
+                    <th class="sort align-middle" scope="col"  style="width:5%; ">수당율</th>
+                    <th class="sort align-middle" scope="col"  style="width:10%; ">지정 아이디</th>
+                    <th class="sort align-middle" scope="col"  style="width:5%; ">사용여부</th>
+                    <th class="sort align-middle" scope="col"  style="width:5%;  ">등록 일자</th>
+                    <th class="sort align-middle" scope="col"  style="width:5%;  ">관리</th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="members-table-body">
+                    <%
+                    if (basicInfo.agentList.length > 0) {
+                    basicInfo.agentList.forEach(function (el) { 
+                    %>
+                  <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                    <td class="align-middle white-space-nowrap text-700 ">
+                        
+                        <div class="font-sans-serif btn-reveal-trigger position-static">
+                            <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2" type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--2"></span></button>
+                            <div class="dropdown-menu dropdown-menu-start py-2">
+                              <a class="dropdown-item" href="javascript:void(0);" onclick="fnInitProduct('<%=el.a_id %>')" data-bs-toggle="modal" data-bs-target="#addProductModal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent" >상품 매칭</a>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="email align-middle white-space-nowrap"><%=el.a_id %></td>
+                    <td class="email align-middle white-space-nowrap"><%=el.a_nm %></td>
+                    <td class="mobile_number align-middle white-space-nowrap"><%=el.upper_seq_nm %></td>
+                    <td class="city align-middle white-space-nowrap text-900"><%=el.a_rate %>%</td>
+                    <td class="align-middle white-space-nowrap text-700 "><%=el.mem_id %></td>
+                    <td class="align-middle white-space-nowrap text-700 "><%=el.use_yn %></td>
+                    <td class="align-middle white-space-nowrap text-700 "><%=el.crt_dt %></td>
+                    <td class="align-middle   white-space-nowrap text-700 ">
+                      <% if (user.memId != el.a_id || user.memId == 'prime_pg') {
+                      if ( el.seq != 'AGNT00000000000001') { %>
+                      <button
+                        data-bs-toggle="modal" data-bs-target="#confirm-modal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"
+                          class="btn btn-link text-danger fs--2"
+                          style="padding-left : 0px; padding-right : 5px; " 
+                          onclick="fnDel('<%=el.seq%>')"
+                        > 삭제 </button> / 
+                      <button
+                        data-bs-toggle="modal" data-bs-target="#modAgentModal" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"
+                          class="btn btn-link text-success fs--2"
+                          style="padding-left : 0px; padding-left : 5px; " 
+                          onclick="fnModify('<%=el.seq%>','<%=el.upper_seq%>','<%=el.a_id %>','<%=el.a_nm %>','<%=el.mem_id %>','<%=el.a_rate %>','<%=el.a_depth %>')"
+                        > 수정 </button> 
+                      <% } } %>
+                    </td>
+                  </tr>
+                  <% } ) } %>
+                </tbody>
+              </table>
+            </div>
+            
+            <%- include('../includes/paging.ejs') %>
+          </div>
+        </div>
+    
+        <!-- footer -->
+        <%- include('../includes/footer.ejs') %>
+      </div>
+   
+    </main>
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+    <%- include('./agent_add.ejs') %>
+    <%- include('./agent_modify.ejs') %>
+    <%- include('./addProductModal.ejs') %>
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <%- include('../includes/scripts.ejs') %>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <%- include('../includes/confirmModal.ejs') %>
+    <%- include('../includes/modal.ejs') %>
+    <input type="hidden" id="delSeq" value="" />
+    <script>
+        window.onload = function(){};
+
+        function fnDel(seq) {
+          $('#delSeq').val(seq);
+          $('#confirmTitle').text("에이전트 삭제");
+          $('#confirmMessage').html(`하부 에이전트 및 회원 이 <span style="color:red">상위 코드로 연동</span> 됩니다.`);
+        }
+
+        function fnConfirm() {
+          $('.btnCreate').hide();
+          let data = {};
+          data.seq = $('#delSeq').val();
+          $.ajax({
+            url: "/a/delAgent",
+            dataType: 'json',
+            type: 'POST',
+            data: data,
+            success: function (result) {
+                if(result.success) {
+                  console.log(result)
+                  fnAlertReloadMessage(result.message)
+                } else {
+                  fnAlertMessage(result.message)
+                }
+                
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert('새로 고침 후 다시 시도하여 주세요');
+            } //function끝
+          });
+      }
+      
+function fnSearch(pindex) {
+    let pageIndex = $('#pageIndex').val();
+    if (pindex != 'undefined' && pindex != undefined) pageIndex = pindex;
+
+   
+    let rowsPerPage =10;//$('#rowsPerPage').val();
+    let srchText = $('#srchText').val();
+    let srchOption = $('#srchOption option:selected').val();
+    let srchMember = $('#srchMember option:selected').val();
+
+    let srtDt = $('#srtDt').val();
+    let endDt = $('#endDt').val();
+
+    let form = document.createElement("form");
+    form.setAttribute("charset", "UTF-8");
+    form.setAttribute("method", "Post");
+    form.setAttribute("action", "/a/view");
+
+    let hiddenField1 = document.createElement("input");
+    hiddenField1.setAttribute("type", "hidden");
+    hiddenField1.setAttribute("name", "pageIndex");
+    hiddenField1.setAttribute("value", pageIndex);
+    form.appendChild(hiddenField1);
+
+    let hiddenField2 = document.createElement("input");
+    hiddenField2.setAttribute("type", "hidden");
+    hiddenField2.setAttribute("name", "rowsPerPage");
+    hiddenField2.setAttribute("value", rowsPerPage);
+    form.appendChild(hiddenField2);
+
+    let hiddenField3 = document.createElement("input");
+    hiddenField3.setAttribute("type", "hidden");
+    hiddenField3.setAttribute("name", "srchText");
+    hiddenField3.setAttribute("value", srchText);
+    form.appendChild(hiddenField3);
+
+    let hiddenField4 = document.createElement("input");
+    hiddenField4.setAttribute("type", "hidden");
+    hiddenField4.setAttribute("name", "srchOption");
+    hiddenField4.setAttribute("value", srchOption);
+    form.appendChild(hiddenField4);
+
+
+    let hiddenField6 = document.createElement("input");
+    hiddenField6.setAttribute("type", "hidden");
+    hiddenField6.setAttribute("name", "srchMember");
+    hiddenField6.setAttribute("value", srchMember);
+    form.appendChild(hiddenField6);
+
+
+    let hiddenField7 = document.createElement("input");
+    hiddenField7.setAttribute("type", "hidden");
+    hiddenField7.setAttribute("name", "srtDt");
+    hiddenField7.setAttribute("value", srtDt);
+    form.appendChild(hiddenField7);
+
+    let hiddenField8 = document.createElement("input");
+    hiddenField8.setAttribute("type", "hidden");
+    hiddenField8.setAttribute("name", "endDt");
+    hiddenField8.setAttribute("value", endDt);
+    form.appendChild(hiddenField8);
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,171 @@
+<!-- 회원 생성 업데이트 Modal-->
+<div class="modal fade" id="modAgentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modAgentModalLabel" aria-hidden="true">
+    <div class="modal-dialog   modal-dialog-centered">
+      <div class="modal-content bg-100 p-6">
+        <div class="modal-header border-0 p-0 mb-2">
+          <h3 class="mb-0" id="memInsUpt">에이전트 수정</h3>
+          <button class="btn btn-sm btn-phoenix-secondary" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+        </div>
+        <div class="modal-body px-0 ">
+       
+            
+            <div class="row ms-4">
+                <div class="col-lg-12 ">
+                    <div class="row g-2 ">
+                        <div class="col me-2">
+                            <select class="form-select " id="selModAgent1">
+                                <option value="">선택</option>
+                               
+                            </select>
+                        </div>
+                        <div class="col me-2 fs--1 pt-2 text-center" id="selModAgent2">
+                            
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col " id="setModAgentDiv" >
+                    <div class="row g-2 mt-2">
+                        <div class="col">
+                            <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 에이전트 ID </span>
+                        </div>
+                      
+                        <div class="col">
+                            <input class="form-control input-text-center fs--1" readonly id="mod_agent_id" type="text" value="" />
+                         
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-2">
+                        <div class="col">
+                            <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 에이전트 명 </span>
+                        </div>
+                      
+                        <div class="col">
+                            <input class="form-control input-text-center fs--1" id="mod_agent_nm" type="text" value="" />
+                            <input  id="mod_agent_seq" type="hidden" value="" />
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-2 ">
+                        <div class="col">
+                            <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 지정회원 </span>
+                            
+                        </div>
+                        <div class="col">
+                            <div class="row ">
+                                <div class="col">
+                                    <input class="form-control input-text-center fs--1" id="mod_agent_mem_id" type="text" value="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <div class="row g-2 mt-2 ">
+                        <div class="col">
+                            <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 수수료 %</span>
+                        
+                        </div>
+                        <div class="col">
+                            <input class="form-control input-text-center fs--1" id="mod_agent_rate" type="text" value="" />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-2 ">
+                        <div class="col">
+                            <span class="form-control input-text-center fs--1 border-0 bg-color-0"> 패스워드</span>
+                        
+                        </div>
+                        <div class="col">
+                            <input class="form-control input-text-center fs--1" id="mod_password" type="text" value="" />
+                        </div>
+                    </div>
+                        
+                </div>
+            </div>
+        
+       
+        </div>
+        <div class="modal-footer border-0 pt-6 px-0 pb-0">
+          <button class="btn btn-link text-danger px-3 my-0" data-bs-dismiss="modal" aria-label="Close">취소</button>
+          <button class="btn btn-primary my-0" onclick="fnModifyUpt()" id="memIns">수정</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+    function fnModify(seq , upper_seq, aId, aNm, mem_id, a_rate,a_depth) {
+        $('#selModAgent2').val(upper_seq)
+        $('#mod_agent_id').val(aId)
+        $('#mod_agent_nm').val(aNm)
+        $('#mod_agent_mem_id').val(mem_id)
+        $('#mod_agent_rate').val(a_rate)
+        $('#mod_agent_seq').val(seq)
+        
+        let data = {};
+        data.aDepth = a_depth;
+        $.ajax({
+          url: "/a/getDepthAgent",
+          dataType: 'json',
+          type: 'POST',
+          data: data,
+          success: function (result) {
+            if(result.success) {
+                console.log(result.data.upperList)
+                
+                if (result.data.upperList.length > 0) {
+                    let sub = ""
+                    result.data.upperList.forEach(function (el) { 
+                        console.log(el)
+                        if(upper_seq == el.seq) {
+                            sub += ' <option value="'+el.seq+'" selected>'+el.a_nm+'</option> '
+                        } else {
+                            sub += ' <option value="'+el.seq+'">'+el.a_nm+'</option> '
+                        }
+                    })
+                  
+                    $('#selModAgent1').append(sub)
+                }
+              } else {
+                fnAlertMessage(result.message)
+              }
+              
+          },
+          error: function (XMLHttpRequest, textStatus, errorThrown) {
+              alert('새로 고침 후 다시 시도하여 주세요');
+          } //function끝
+        });
+    }
+
+    function fnModifyUpt() {
+        
+        let data = {};
+        data.seq = $('#mod_agent_seq').val()
+        data.aId = $('#mod_agent_id').val()
+        data.aNm =  $('#mod_agent_nm').val();
+        data.memId = $('#mod_agent_mem_id').val()
+        data.rate = $('#mod_agent_rate').val()
+        data.upperAgent =  $('#selModAgent2').val();
+        data.modPassword =  $('#mod_password').val();
+        
+        $.ajax({
+          url: "/a/uptModyAgent",
+          dataType: 'json',
+          type: 'POST',
+          data: data,
+          success: function (result) {
+            if(result.success) {
+                //fnAlertReloadMessage(result.message)
+                fnAlertReloadMessage(result.message)
+              } else {
+                fnAlertMessage(result.message)
+              }
+              
+          },
+          error: function (XMLHttpRequest, textStatus, errorThrown) {
+              alert('새로 고침 후 다시 시도하여 주세요');
+          } //function끝
+        });
+    }
+</script>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko" dir="ltr">
+
+  <head>
+    <%- include('../includes/head.ejs') %>
+  </head>
+
+
+  <body>
+
+    <!-- ===============================================-->
+    <!--    Main Content-->
+    <!-- ===============================================-->
+    <main class="main" id="top">
+        <%- include('../includes/menu.ejs') %>
+      
+        <%- include('../includes/top.ejs') %>
+      
+
+      <div class="content">
+        <%- include('../includes/nav.ejs') %>
+
+        <div class="border-bottom mb-7 mx-n3 px-2 mx-lg-n6 px-lg-6">
+          <div class="row">
+            <div class="col-xl-9">
+              <div class="d-sm-flex justify-content-between">
+                <h2 class="text-bold text-1100 mb-5"><%=basicInfo.title%></h2>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-9">
+                <div class="d-sm-flex justify-content-between">
+                <h2 class="text-bold text-1100 mb-5 fs-2">상품 공통 코드</h2>
+                <div class="d-flex mb-3">
+                    <button class="btn btn-primary" onclick="fnOpenCommMst()">상품 코드 등록</button>
+                </div>
+                
+            </div>
+            <div class="table-responsive scrollbar ms-n1 ps-1 mb-5">
+                <table class="table table-sm fs--1 mb-0">
+                  <thead>
+                    <tr>
+                      <th class="sort align-middle" scope="col"  style="width:5%; min-width:100px;">상품코드</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; min-width:100px;">상풍명</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; min-width:100px;">카테고리</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; min-width:100px;">KRW</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; min-width:100px;">USD</th>
+                      <th class="sort align-middle" scope="col"  style="width:5%; min-width:100px;">업체상품코드</th>
+
+                      <th class="sort align-middle" scope="col"  style="width:10%; min-width:100px;">사용여부</th>
+                      <th class="sort align-middle" scope="col"  style="width:70%; min-width:100px;">비고</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody class="list" id="members-table-body">
+                    <% basicInfo.productCdList.forEach(function (el) { %>
+                    <tr class="hover-actions-trigger btn-reveal-trigger position-static">
+                      <td class=" align-middle white-space-nowrap"><%= el.product_cd %></td>
+                      <td class=" align-middle white-space-nowrap text-900"><%= el.product_nm %></td>
+                      <td class=" align-middle white-space-nowrap text-700 "><%= el.category %></td>
+                      <td class=" align-middle white-space-nowrap text-700 "><%= el.krw %></td>
+                      <td class=" align-middle white-space-nowrap text-700 "><%= el.usd %></td>
+                      <td class=" align-middle white-space-nowrap text-700 "><%= el.match_id %></td>
+                      <td class=" align-middle white-space-nowrap text-700"><%= el.use_yn %></td>
+                     
+                      
+                    </tr>
+                    <% })  %>
+                  </tbody>
+                </table>
+            </div>
+
+            <form class="mb-9" id="mstCode" style="display:none">
+                <div class="row g-3 col-md-9" >
+                    <div class="col-md-3 position-relative">
+                        <label class="form-label" for="productCd">상품 코드</label>
+                        <input class="form-control" id="productCd" readonly type="text" value="" required="" />
+                    </div>
+                    <div class="col-md-3 position-relative">
+                        <label class="form-label" for="productNm">상품 명</label>
+                        <input class="form-control" id="productNm" type="text" value="" required="" />
+                    </div>
+                    <div class="col-md-3 position-relative">
+                        <label class="form-label" for="useYn">사용여부</label>
+                        <select class="form-select" id="useYn" required="">
+                            <option selected="" disabled="" value="">선택</option>
+                            <option value="Y">시용</option>
+                            <option value="N">미사용</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="form-label" for="category">카테고리</label>
+                        <input class="form-control" id="category" type="text" required="" />
+                        <div class="invalid-tooltip"></div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="form-label" for="krw">krw</label>
+                        <input class="form-control" id="krw" type="text" required="" />
+                        <div class="invalid-tooltip"></div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="form-label" for="usd">usd</label>
+                        <input class="form-control" id="usd" type="text" required="" />
+                        <div class="invalid-tooltip"></div>
+                    </div>
+                    <div class="col-md-6 position-relative">
+                        <label class="form-label" for="matchId">연동 ID</label>
+                        <input class="form-control" id="matchId" type="text" required="" />
+                        <div class="invalid-tooltip"></div>
+                    </div>
+                    <div class="col-md-9 btn-end ">
+                        <span class="btn btn-link text-danger " onclick="fnCloseCommMst()">닫기</span>
+                        <span class="btn btn-primary" onclick="fnSaveMstCode()">저장</span>
+                    </div>
+                </fdiv>    
+            </form>
+          </div>
+        </div>
+    
+      </div>
+     
+    </main>
+   
+    <!-- ===============================================-->
+    <!--    End of Main Content-->
+    <!-- ===============================================-->
+
+    <!-- ===============================================-->
+    <!--    JavaScripts-->
+    <!-- ===============================================-->
+    <%- include('../includes/scripts.ejs') %>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <%- include('../includes/modal.ejs') %>
+  
+    <script>
+        function fnOpenCommMst() {
+            $('#mstCode').show();
+        }
+
+        function fnCloseCommMst() {
+            $('#mstCode').hide();
+        }
+
+
+        function fnSaveMstCode() {
+            let productNm = $('#productNm').val();
+            let useYn = $('#useYn').val();
+            let category = $('#category').val();
+            let krw = $('#krw').val();
+            let usd = $('#usd').val();
+            let matchId = $('#matchId').val();
+            
+            let data = {
+                productNm: productNm,
+                useYn: useYn,
+                category : category,
+                krw : krw,
+                usd : usd,
+                matchId : matchId,
+            }
+    
+            $.ajax({
+                url: '/s/setProductCode',
+                dataType: 'json',
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        fnAlertReloadMessage("정상처리 되었습니다.")
+                    } else {
+                        alert('새로 고침 후 다시 시도하여 주세요');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('새로 고침 후 다시 시도하여 주세요');
+                } //function끝
+            });
+        }
+
+
+        function fnOpenCommDtl(cmmCd) {
+            $('#scmmCd').val(cmmCd)
+            $('#dtlCode').show();
+        }
+
+        function fnCloseCommDtl() {
+            let cmmNm = $('#cmmNm').val();
+            $('#dtlCode').hide();
+        }
+
+        function fnShowCommDtl(cmmCd) {
+            $('#cmmDtlBody').empty()
+            let data = {
+                cmmCd: cmmCd
+            }
+    
+            $.ajax({
+                url: '/s/cmmcdDtl',
+                dataType: 'json',
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    console.log(result.dtlList)
+                    if (result.dtlList.length > 0) {
+                        let html = "";
+                        result.dtlList.forEach(function (el) { 
+                           
+                            html += ' <tr class="hover-actions-trigger btn-reveal-trigger position-static">'
+                                html += ' <td class=" align-middle white-space-nowrap">'+el.cmmCd +'</td>'
+                                html += ' <td class=" align-middle white-space-nowrap">'+el.cmmDtlCd +'</td>'
+                                html += ' <td class=" align-middle white-space-nowrap text-900">'+el.cmmDtlName +'</td>'
+                                html += '  <td class=" align-middle white-space-nowrap text-700">'+el.cmmSn +'</td>'
+                                html += ' <td class=" align-middle white-space-nowrap text-700">'+el.useYn +'</td>'
+                                html += ' <td class=" align-middle white-space-nowrap text-700 ">'+el.cmmDtlDesc +'</td>'
+                                html += ' <td class=" align-middle white-space-nowrap text-700 ">'
+                                    html += ' <span class="btn btn-link text-danger " onclick="fnDelDtlCode(\''+el.cmmDtlCd +'\')">삭제</span> '
+                                    html += ' </td>'
+                                    html += ' </tr>'
+                        }) 
+                        $('#cmmDtlBody').append(html)
+                    } else {
+                        alert('새로 고침 후 다시 시도하여 주세요');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('새로 고침 후 다시 시도하여 주세요');
+                } //function끝
+            });
+        }
+
+        function fnSaveDtlCode() {
+            let cmmCd = $('#scmmCd').val();
+            let cmmDtlNm = $('#cmmDtlNm').val();
+            let cmmSn = $('#cmmSn').val();
+            let dtlUseYn = $('#dtlUseYn').val();
+            let cmmDtlDesc = $('#cmmDtlDesc').val();
+            
+            let data = {
+                cmmCd: cmmCd,
+                cmmDtlName: cmmDtlNm,
+                cmmSn: cmmSn,
+                useYn: dtlUseYn,
+                cmmDtlDesc : cmmDtlDesc
+            }
+    
+            $.ajax({
+                url: '/s/setCommCodeDtl',
+                dataType: 'json',
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        fnAlertReloadMessage("정상처리 되었습니다.")
+                    } else {
+                        alert('새로 고침 후 다시 시도하여 주세요');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('새로 고침 후 다시 시도하여 주세요');
+                } //function끝
+            });
+        }
+
+        function fnDelDtlCode(cmmDtlCd) {
+            
+            let data = {
+                cmmDtlCd: cmmDtlCd
+            }
+    
+            $.ajax({
+                url: '/s/delCommCodeDtl',
+                dataType: 'json',
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    if (result.success) {
+                        fnAlertReloadMessage("정상처리 되었습니다.")
+                    } else {
+                        alert('새로 고침 후 다시 시도하여 주세요');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('새로 고침 후 다시 시도하여 주세요');
+                } //function끝
+            });
+        }
+
+    </script>
+  </body>
+
+</html>

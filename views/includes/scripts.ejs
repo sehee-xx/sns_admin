@@ -1,0 +1,160 @@
+<script src="/admin/vendors/popper/popper.min.js"></script>
+<script src="/admin/vendors/bootstrap/bootstrap.min.js"></script>
+<script src="/admin/vendors/anchorjs/anchor.min.js"></script>
+<script src="/admin/vendors/is/is.min.js"></script>
+<script src="/admin/vendors/fontawesome/all.min.js"></script>
+<script src="/admin/vendors/lodash/lodash.min.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+<script src="/admin/vendors/list.js/list.min.js"></script>
+<script src="/admin/vendors/feather-icons/feather.min.js"></script>
+<script src="/admin/vendors/dayjs/dayjs.min.js"></script>
+<script src="/admin/js/phoenix.js"></script>
+
+<script src="/admin/vendors/fullcalendar/main.min.js"></script>
+<script>
+	function fnMove(path) {
+	var form = document.createElement("form");
+	form.setAttribute("charset", "UTF-8");
+	form.setAttribute("method", "Post"); //Post 방식
+	form.setAttribute("action", path); //요청 보낼 주소
+  
+	document.body.appendChild(form);
+	form.submit();
+  }
+  
+  
+  </script>
+  
+<script>
+    function setCookie(cookie_name, value, days) {
+		var exdate = new Date();
+		exdate.setDate(exdate.getDate() + days);
+
+		var cookie_value = escape(value) + (days == null ? "" : "; expires=" + exdate.toUTCString());
+		document.cookie = cookie_name + "=" + cookie_value + "; path=/";
+	}
+
+	function getCookie(cookie_name) {
+		var x, y;
+		var val = document.cookie.split(";");
+
+		for (var i = 0; i < val.length; i++) {
+			x = val[i].substr(0, val[i].indexOf("="));
+			y = val[i].substr(val[i].indexOf("=") + 1);
+			x = x.replace(/^\s+|\s+$/g, ""); // 앞과 뒤의 공백 제거하기
+			if (x == cookie_name) {
+				return unescape(y); // unescape로 디코딩 후 값 리턴
+			}
+		}
+	}
+
+	//빈값 체크
+	function nullChk(obj) {
+		let rtn = true;
+		if (null == obj || !obj || obj === undefined) {
+			rtn = false;
+		}
+		return rtn;
+	}
+
+	 //3자리 단위마다 콤마 생성
+	function addCommas(x) {
+        if (x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } else {
+            return x;
+        }
+
+    }
+
+    //모든 콤마 제거
+    function removeCommas(x) {
+        if (!x || x.length == 0) return "";
+        else return x.split(",").join("");
+    }
+
+	function filterNumber(event) {
+        var code = event.keyCode;
+        console.log(code)
+        if (code > 47 && code < 58) {
+        return;
+        }
+        if (code > 95 && code < 106) {
+        return;
+        }
+        if (code === 110 || code === 190) {
+        return;
+        }
+        if (code === 46 || code === 8) {
+        return;
+        }
+        if (code === 188) {
+          return;
+        }
+		    event.preventDefault();
+	}
+
+	function wrapWindowByMaskHide() {
+		$("#mask, #loadingImg").hide();
+		$("#mask, #loadingImg").remove();
+		$('#salesModal').hide()
+	}
+
+	function wrapWindowByMaskShow() {
+		//화면의 높이와 너비를 구한다.
+		var maskHeight = $(document).height();
+		//      var maskWidth = $(document).width();
+		var maskWidth = window.document.body.clientWidth;
+
+		var mask = "<div id='mask' style='position:absolute; z-index:9000; background-color:#000000; display:none; left:0; top:0;'></div>";
+		var loadingImg = "";
+
+		loadingImg += "<div id='loadingImg' style='position:absolute; display:none; top:50%; left:50%; z-index:10000; transform: translate(-50%, -50%);'>";
+		loadingImg += " <img src='/image/viewLoading.gif'/>";
+		loadingImg += "</div>";
+
+		//화면에 레이어 추가
+		$("body").append(mask).append(loadingImg);
+
+		//마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+		$("#mask").css({
+			width: maskWidth,
+			height: maskHeight,
+			opacity: "0.3",
+		});
+
+		//마스크 표시
+		$("#mask").show();
+
+		//로딩중 이미지 표시
+		$("#loadingImg").show();
+	}
+</script>
+
+
+<script >
+	function fnAdminModifyUpt() {
+   
+	  let data = {};
+	  data.aPassword = $('#admin_password').val();
+
+	  $.ajax({
+		url: "/m/adminModify",
+		dataType: 'json',
+		type: 'POST',
+		data: data,
+		success: function (result) {
+			if(result.success) {
+			  fnAlertReloadMessage(result.message)
+			} else {
+			  fnAlertMessage(result.message)
+			}
+			
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+		 
+			alert('새로 고침 후 다시 시도하여 주세요');
+		} //function끝
+	  });
+	}
+  </script>

@@ -1,0 +1,77 @@
+<!-- 신규/재 매출 모달 -->
+<div class="modal fade" id="adminYN" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="adminYNLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+      <div class="modal-content bg-100 p-6">
+        <div class="modal-header border-0 p-0 mb-2">
+          <h3 class="mb-0" id="memInsUpt">어드민 관리자 지정 </h3>
+          <button class="btn btn-sm btn-phoenix-secondary" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times text-danger"></span></button>
+        </div>
+        <div class="modal-body px-0 ">
+              <div class="row">
+                <div class="row g-2">
+                    <div class="col-lg-6">
+                        <label class="text-1000 fw-bold mb-2" id="mTitle1" >회원 아이디</label>
+                        <input class="form-control" type="text" id="adminMemId" value="" readonly placeholder="아이디" />
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <label class="text-1000 fw-bold mb-2" id="mTitle3">관리자 지정</label>
+                        <select name="" id="selAdminYN" class="form-select" >
+                            <option value="">선택 </option>
+                            <option value="Y">사용 </option>
+                          </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="btn-end border-0 pt-6 px-0 pb-0 col-lg-12">
+                        <button class="btn btn-link text-danger px-3 my-0" data-bs-dismiss="modal" aria-label="Close">취소</button>
+                        <button class="btn btn-primary my-0" onclick="fnAdminYN()">저장</button>
+                    </div>
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+    function fnAdminYNInit(memId) {
+   
+        $('#adminMemId').val(memId)
+    }
+
+  function fnAdminYN()  {
+    let selAdminYN = $('#selAdminYN').val()
+    if(!nullChk(selAdminYN) ) {
+      fnAlertMessage("사용여부를 선택해 주세요");
+      return
+    }
+   
+    let data = {}
+    data.memId = $('#adminMemId').val();
+    data.adminYN = selAdminYN;
+
+    wrapWindowByMaskShow()
+    $.ajax({
+        url: '/m/adminProc',
+        dataType: 'json',
+        type: 'POST',
+        data: data,
+        success: function (result) {
+          wrapWindowByMaskHide()
+          if(result.success) {
+              fnAlertReloadMessage(result.message)
+          } else {
+              fnAlertMessage(result.message);
+          }
+            
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          wrapWindowByMaskHide()
+          fnAlertMessage('새로 고침 후 다시 시도하여 주세요');
+        } //function끝
+    });
+  }
+
+  
+</script>
