@@ -179,14 +179,13 @@ function fnGetCategoryData(param, conn) {
 }
 
 function fnGetSellProductData(param, conn) {
-  console.log("param", param);
   return new Promise(function (resolve, reject) {
     let sql = `select tc.seq category_seq, tc.title as category_title, tsp.title product_title, tsp.min, tsp.max, tsp.price 
-      from tb_sell_product tsp 
-      inner join tb_category tc on tsp.category_seq = tc.seq 
-      where 1=1 `;
-    if (!isNullOrEmpty(param.categrorySeq)) {
-      sql += ` and tsp.category_seq = ${param.categrorySeq}`;
+        from tb_sell_product tsp 
+        inner join tb_category tc on tsp.category_seq = tc.seq 
+        where 1=1 `;
+    if (!isNullOrEmpty(param.categorySeq)) {
+      sql += ` and tsp.category_seq = ${param.categorySeq}`;
     }
     sql += ` order by tsp.category_seq asc;`;
 
