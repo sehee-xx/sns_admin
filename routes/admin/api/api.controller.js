@@ -313,7 +313,6 @@ exports.category = async (req, res, next) => {
 
     // 요청에서 인덱스 매개변수 가져오기
     let index = req.params.index;
-    // console.log("인덱스 뭘까", index);
 
     // 카테고리 테이블 데이터를 가져오는 쿼리 실행
     mydb.executeTx(async (conn) => {
@@ -361,29 +360,31 @@ exports.category = async (req, res, next) => {
 
 // 판매 상품 테이블 데이터를 가져오는 API 엔드포인트
 exports.sellproduct = async (req, res, next) => {
-  //   console.log("REQ", req);
   try {
     // 데이터베이스 연결 풀 가져오기
     let pool = req.app.get("pool");
     let mydb = new Mydb(pool);
 
-    // 요청에서 인덱스 매개변수 가져오기
-    let index = req.params.index;
-    // console.log("인덱스 뭘까", index);
+    // 요청에서 categorySeq 파라미터 가져오기
+    let categorySeq = req.query.categorySeq;
+    console.log("categorySeq:", categorySeq);
 
     // 판매 상품 데이터를 가져오는 쿼리 실행
     mydb.executeTx(async (conn) => {
       try {
         // 판매 상품 테이블에서 데이터를 가져오는 쿼리 실행
-        let categoryList = await Query.QGetSellProductList(index, conn);
+        let productList = await Query.QGetSellProductList(
+          { categorySeq },
+          conn
+        );
 
         // 가져온 데이터가 있으면 응답으로 반환
-        if (categoryList.length > 0) {
+        if (productList.length > 0) {
           return res.json(
             rtnUtil.successTrue(
               "200",
               "판매 상품 정보를 성공적으로 받아왔습니다.",
-              categoryList
+              productList
             )
           );
         } else {
